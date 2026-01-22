@@ -1,5 +1,5 @@
-import { TrendingUp, Calendar, Zap, Loader2, Wallet, Edit2, Check, X } from "lucide-react";
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";import { useEffect, useState } from "react";
+import { TrendingUp, Zap, Loader2, Wallet, Check, X } from "lucide-react";
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi"; import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { formatEther } from "viem";
 import { useWallets } from "@privy-io/react-auth";
@@ -15,74 +15,74 @@ interface RewardsStatsProps {
 }
 
 export function RewardsStats({ totalEarned, rewardWallet, userAddress, onUpdateRewardWallet }: RewardsStatsProps) {
-    const { user, connectWallet } = usePrivy();
+    const { connectWallet } = usePrivy();
     const [isConnecting, setIsConnecting] = useState(false);
-const { wallets } = useWallets();
+    const { wallets } = useWallets();
 
-const activeWallet = wallets[0];
-const isWalletConnected = !!activeWallet;
-useEffect(() => {
-  if (!activeWallet?.address) return;
-if (!userAddress) return;
-  // If reward wallet exists and is different → do nothing
-  if (
-    rewardWallet &&
-    rewardWallet.toLowerCase() !== activeWallet.address.toLowerCase()
-  ) {
-    return;
-  }
+    const activeWallet = wallets[0];
+    const isWalletConnected = !!activeWallet;
+    useEffect(() => {
+        if (!activeWallet?.address) return;
+        if (!userAddress) return;
+        // If reward wallet exists and is different → do nothing
+        if (
+            rewardWallet &&
+            rewardWallet.toLowerCase() !== activeWallet.address.toLowerCase()
+        ) {
+            return;
+        }
 
-  // If reward wallet already saved and matches → do nothing
-  if (
-    rewardWallet &&
-    rewardWallet.toLowerCase() === activeWallet.address.toLowerCase()
-  ) {
-    return;
-  }
+        // If reward wallet already saved and matches → do nothing
+        if (
+            rewardWallet &&
+            rewardWallet.toLowerCase() === activeWallet.address.toLowerCase()
+        ) {
+            return;
+        }
 
-  // If reward wallet is empty → save connected wallet
-  (async () => {
-    try {
-      await fetch(`${BACKEND_URL}/users/reward-wallet`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Wallet-Address": userAddress,
-        },
-        body: JSON.stringify({
-          reward_wallet: activeWallet.address,
-        }),
-      });
+        // If reward wallet is empty → save connected wallet
+        (async () => {
+            try {
+                await fetch(`${BACKEND_URL}/users/reward-wallet`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Wallet-Address": userAddress,
+                    },
+                    body: JSON.stringify({
+                        reward_wallet: activeWallet.address,
+                    }),
+                });
 
-      onUpdateRewardWallet?.();
-      console.log("✅ Reward wallet saved:", activeWallet.address);
-    } catch (e) {
-      console.error("❌ Failed to save reward wallet", e);
-    }
-  })();
-}, [isWalletConnected, activeWallet?.address, rewardWallet, userAddress]);
+                onUpdateRewardWallet?.();
+                console.log("✅ Reward wallet saved:", activeWallet.address);
+            } catch (e) {
+                console.error("❌ Failed to save reward wallet", e);
+            }
+        })();
+    }, [isWalletConnected, activeWallet?.address, rewardWallet, userAddress]);
     /**
      * 1️⃣ PRIVY SMART WALLET (ON-CHAIN IDENTITY)
      * This is the address cashback is assigned to in the contract
      */
 
-useEffect(() => {
-  console.log("🧾 DB wallet_address (userAddress):", userAddress);
-  console.log("👛 Active Privy wallet:", activeWallet?.address);
-}, [activeWallet, userAddress]);
+    useEffect(() => {
+        console.log("🧾 DB wallet_address (userAddress):", userAddress);
+        console.log("👛 Active Privy wallet:", activeWallet?.address);
+    }, [activeWallet, userAddress]);
 
     /**
      * 
      * 2️⃣ CASHBACK OWNER (ALWAYS THIS)
      */
-const cashbackOwner = (rewardWallet || activeWallet?.address) as
-  | `0x${string}`
-  | undefined;
+    const cashbackOwner = (rewardWallet || activeWallet?.address) as
+        | `0x${string}`
+        | undefined;
 
-const isWrongWallet =
-  !!activeWallet &&
-  !!rewardWallet &&
-  activeWallet.address.toLowerCase() !== rewardWallet.toLowerCase();
+    const isWrongWallet =
+        !!activeWallet &&
+        !!rewardWallet &&
+        activeWallet.address.toLowerCase() !== rewardWallet.toLowerCase();
     /**
      * 3️⃣ PAYOUT / DISPLAY WALLET (OFF-CHAIN ONLY)
      */
@@ -128,24 +128,24 @@ const isWrongWallet =
             refetch(); // Update balance after successful claim
         }
     }, [isConfirmed, refetch]);
-const handleClaim = async () => {
-  if (!activeWallet) {
-    await connectWallet();
-    return;
-  }
+    const handleClaim = async () => {
+        if (!activeWallet) {
+            await connectWallet();
+            return;
+        }
 
-  if (!CASHBACK_CONTRACT_ADDRESS) {
-    alert("Contract not ready");
-    return;
-  }
+        if (!CASHBACK_CONTRACT_ADDRESS) {
+            alert("Contract not ready");
+            return;
+        }
 
-  writeContract({
-    address: CASHBACK_CONTRACT_ADDRESS,
-    abi: LogosCashbackVaultUserABI,
-    functionName: "claim",
-    account: activeWallet.address as `0x${string}`,
-  });
-};
+        writeContract({
+            address: CASHBACK_CONTRACT_ADDRESS,
+            abi: LogosCashbackVaultUserABI,
+            functionName: "claim",
+            account: activeWallet.address as `0x${string}`,
+        });
+    };
     const handleSaveWallet = async () => {
         if (!newWalletInput || !newWalletInput.startsWith("0x") || newWalletInput.length !== 42) {
             alert("Please enter a valid Ethereum address.");
@@ -216,63 +216,63 @@ const handleClaim = async () => {
                         <span className="text-sm font-medium text-neutral-500">ETH</span>
                     </div>
                 </div>
-{activeWallet && isWrongWallet && (
-  <p className="text-[10px] text-red-500 mt-2">
-    Wrong wallet connected. Please connect the rewards wallet ending in{" "}
-    {rewardWallet?.slice(-4)}.
-  </p>
-)}
+                {activeWallet && isWrongWallet && (
+                    <p className="text-[10px] text-red-500 mt-2">
+                        Wrong wallet connected. Please connect the rewards wallet ending in{" "}
+                        {rewardWallet?.slice(-4)}.
+                    </p>
+                )}
                 <div className="mt-4">
-              {!activeWallet ? (
-  // 1️⃣ ALWAYS show connect if disconnected
-  <button
-    disabled={isConnecting}
-    onClick={async () => {
-      if (isConnecting) return;
-      setIsConnecting(true);
-      await connectWallet();
-      setIsConnecting(false);
-    }}
-    className="w-full bg-[var(--ink)] text-white text-xs font-semibold py-2 rounded-lg hover:bg-black transition disabled:opacity-50"
-  >
-    {isConnecting ? "Connecting..." : "Connect Rewards Wallet"}
-  </button>
+                    {!activeWallet ? (
+                        // 1️⃣ ALWAYS show connect if disconnected
+                        <button
+                            disabled={isConnecting}
+                            onClick={async () => {
+                                if (isConnecting) return;
+                                setIsConnecting(true);
+                                await connectWallet();
+                                setIsConnecting(false);
+                            }}
+                            className="w-full bg-[var(--ink)] text-white text-xs font-semibold py-2 rounded-lg hover:bg-black transition disabled:opacity-50"
+                        >
+                            {isConnecting ? "Connecting..." : "Connect Rewards Wallet"}
+                        </button>
 
-) : isWrongWallet ? (
-  // 2️⃣ Wallet connected BUT wrong
-  <button
-    onClick={async () => {
-      await connectWallet();
-    }}
-    className="w-full bg-neutral-100 text-neutral-700 text-xs font-semibold py-2 rounded-lg hover:bg-neutral-200 transition"
-  >
-    Switch to Rewards Wallet
-  </button>
+                    ) : isWrongWallet ? (
+                        // 2️⃣ Wallet connected BUT wrong
+                        <button
+                            onClick={async () => {
+                                await connectWallet();
+                            }}
+                            className="w-full bg-neutral-100 text-neutral-700 text-xs font-semibold py-2 rounded-lg hover:bg-neutral-200 transition"
+                        >
+                            Switch to Rewards Wallet
+                        </button>
 
-) : Number(claimableEth) > 0 ? (
-  // 3️⃣ Correct wallet → claim
-  <button
-    onClick={handleClaim}
-    disabled={isClaiming}
-    className="w-full bg-[var(--ink)] text-white text-xs font-semibold py-2 rounded-lg hover:bg-black transition flex items-center justify-center gap-2 disabled:opacity-50"
-  >
-    {isClaiming ? <Loader2 className="animate-spin" size={14} /> : <Zap size={14} />}
-    {isClaiming ? "Claiming..." : "Claim Now"}
-  </button>
+                    ) : Number(claimableEth) > 0 ? (
+                        // 3️⃣ Correct wallet → claim
+                        <button
+                            onClick={handleClaim}
+                            disabled={isClaiming}
+                            className="w-full bg-[var(--ink)] text-white text-xs font-semibold py-2 rounded-lg hover:bg-black transition flex items-center justify-center gap-2 disabled:opacity-50"
+                        >
+                            {isClaiming ? <Loader2 className="animate-spin" size={14} /> : <Zap size={14} />}
+                            {isClaiming ? "Claiming..." : "Claim Now"}
+                        </button>
 
-) : (
-  // 4️⃣ No rewards
-  <p className="text-[10px] text-neutral-400 mt-1">
-    Nothing to claim yet.
-  </p>
-)}
+                    ) : (
+                        // 4️⃣ No rewards
+                        <p className="text-[10px] text-neutral-400 mt-1">
+                            Nothing to claim yet.
+                        </p>
+                    )}
                 </div>
 
                 {/* Reward Wallet UI */}
                 <div className="mt-6 pt-4 border-t border-dashed border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                         <p className="text-[10px] uppercase tracking-wider text-neutral-400 font-bold">Reward Wallet</p>
-                        
+
                     </div>
 
                     {isEditingWallet ? (

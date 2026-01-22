@@ -10,7 +10,7 @@ import { IssueCardForm, StarpayFormData } from "@/components/IssueCardForm";
 import { BridgeWidget } from "@/components/BridgeWidget";
 import { DeleteCardModal } from "@/components/DeleteCardModal";
 import { TierTable } from "@/components/TierTable";
-import { Plus, X, Zap, Loader2, CheckCircle, Clock, AlertTriangle, Wallet, CreditCard as CreditCardIcon, LogOut } from "lucide-react";
+import { Plus, X, Zap, Loader2, Clock, AlertTriangle, Wallet, CreditCard as CreditCardIcon } from "lucide-react";
 import {
   Transaction,
   fetchCashbackSummary,
@@ -36,7 +36,7 @@ interface CardDetails {
   redemptionUrl?: string;
 }
 
-function getEthosAddress(user: any): string | null {
+function getEthosAddress(user: { linkedAccounts?: unknown[]; linked_accounts?: unknown[] } | null): string | null {
   if (!user) return null;
 
   const linked =
@@ -45,6 +45,7 @@ function getEthosAddress(user: any): string | null {
     [];
 
   const crossApp = linked.find(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (a: any) => a.type === "cross_app"
   );
 
@@ -613,7 +614,7 @@ export default function Dashboard() {
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-100 text-xs text-neutral-600 w-full text-left flex gap-2">
                 <AlertTriangle size={14} className="text-yellow-500 shrink-0 mt-0.5" />
-                <p>Please check the "Rewards" box on your dashboard to save a wallet address.</p>
+                <p>Please check the &quot;Rewards&quot; box on your dashboard to save a wallet address.</p>
               </div>
               <button
                 onClick={() => setShowRewardWalletWarning(false)}
