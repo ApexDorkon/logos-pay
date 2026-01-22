@@ -429,18 +429,7 @@ export default function Dashboard() {
                           {pollingStatus === 'processing' && "Issuing your virtual card..."}
                         </p>
 
-                        {/* DEV: Skip Button */}
-                        {pollingStatus !== 'completed' && (
-                          <button
-                            onClick={() => {
-                              setPollingStatus("completed");
-                              completeIssuance({});
-                            }}
-                            className="mt-4 text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded border border-red-200 hover:bg-red-200"
-                          >
-                            DEV: Skip to Success
-                          </button>
-                        )}
+
                       </div>
 
                       <div className="flex items-center justify-center gap-2 mt-6 text-xs text-neutral-400">
