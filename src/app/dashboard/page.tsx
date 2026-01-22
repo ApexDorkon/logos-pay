@@ -47,7 +47,7 @@ function getEthosAddress(user: { linkedAccounts?: unknown[]; linked_accounts?: u
   const crossApp = linked.find(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (a: any) => a.type === "cross_app"
-  );
+  ) as any;
 
   if (!crossApp) return null;
 
