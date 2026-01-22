@@ -1,0 +1,26 @@
+[
+    {
+        "type": "function",
+        "name": "claim",
+        "stateMutability": "nonpayable",
+        "inputs": [],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "claimable",
+        "stateMutability": "view",
+        "inputs": [
+            {
+                "name": "user",
+                "type": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ]
+    }
+]

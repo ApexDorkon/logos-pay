@@ -1,0 +1,37 @@
+{
+  "name": "logos-pay",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@privy-io/react-auth": "^3.11.0",
+    "@privy-io/wagmi": "^3.0.0",
+    "@tanstack/react-query": "^5.90.19",
+    "@zebec-fintech/silver-card-sdk": "^1.0.4-alpha.1",
+    "ethers": "^6.16.0",
+    "framer-motion": "^12.26.2",
+    "lucide-react": "^0.562.0",
+    "next": "14.2.35",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "^2.18.8",
+    "wagmi": "^2.12.0",
+    "zustand": "^5.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
